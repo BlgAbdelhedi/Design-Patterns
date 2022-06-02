@@ -1,15 +1,15 @@
 {
-  "name": "parcel",
+  "name": "design-patterns",
   "version": "1.0.0",
-  "description": "boilerplate",
-  "main": "index.js",
+  "description": "design patterns",
+  "main": "index.tsx",
   "scripts": {
     "prebuild": "run-s clean lint",
-    "build": "parcel build src/index.html --no-source-maps",
+    "build": "parcel build public/index.html --no-source-maps",
     "clean": "rimraf ./dist",
     "lint": "run-s lint:code",
     "lint:code": "eslint --ext ts,tsx src",
-    "start": "parcel src/index.html --open"
+    "start": "parcel public/index.html --open"
   },
   "author": "",
   "license": "ISC",
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "singleton": "^1.0.0"
   }
 }

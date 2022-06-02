@@ -32800,7 +32800,38 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/react-dom/client.js":[function(require,module,exports) {
+'use strict';
+
+var m = require('react-dom');
+
+if ("development" === 'production') {
+  exports.createRoot = m.createRoot;
+  exports.hydrateRoot = m.hydrateRoot;
+} else {
+  var i = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+
+  exports.createRoot = function (c, o) {
+    i.usingClientEntryPoint = true;
+
+    try {
+      return m.createRoot(c, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
+
+  exports.hydrateRoot = function (c, h, o) {
+    i.usingClientEntryPoint = true;
+
+    try {
+      return m.hydrateRoot(c, h, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
+}
+},{"react-dom":"../node_modules/react-dom/index.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -32872,23 +32903,302 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/index.tsx":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/patterns/singleton.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var Settings =
+/** @class */
+function () {
+  function Settings() {
+    this.mode = 'dark';
+  }
+
+  Settings.getInstance = function () {
+    if (!Settings.instance) {
+      Settings.instance = new Settings();
+    }
+
+    return Settings.instance;
+  };
+
+  return Settings;
+}();
+
+var _default = Settings;
+exports.default = _default;
+},{}],"../src/patterns/factory.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var IOSButton =
+/** @class */
+function () {
+  function IOSButton() {}
+
+  return IOSButton;
+}();
+
+var AndroidButton =
+/** @class */
+function () {
+  function AndroidButton() {}
+
+  return AndroidButton;
+}();
+
+var ButtonFactory =
+/** @class */
+function () {
+  function ButtonFactory() {}
+
+  ButtonFactory.prototype.createButton = function (os) {
+    if (os === 'ios') {
+      return new IOSButton();
+    } else {
+      return new AndroidButton();
+    }
+  };
+
+  return ButtonFactory;
+}();
+
+var _default = ButtonFactory;
+exports.default = _default;
+},{}],"../src/patterns/builder.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var HotDogBuilder =
+/** @class */
+function () {
+  function HotDogBuilder(bread, ketchup, mustard, kraut) {
+    this.bread = bread;
+    this.ketchup = ketchup;
+    this.mustard = mustard;
+    this.kraut = kraut;
+  }
+
+  HotDogBuilder.prototype.addKetchup = function () {
+    this.ketchup = true;
+    return this;
+  };
+
+  HotDogBuilder.prototype.addMustard = function () {
+    this.mustard = true;
+    return this;
+  };
+
+  HotDogBuilder.prototype.addKraut = function () {
+    this.kraut = true;
+    return this;
+  };
+
+  return HotDogBuilder;
+}();
+
+var _default = HotDogBuilder;
+exports.default = _default;
+},{}],"../src/patterns/fascade.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var PlumbingSystem =
+/** @class */
+function () {
+  function PlumbingSystem() {}
+
+  PlumbingSystem.prototype.setPressure = function (v) {};
+
+  PlumbingSystem.prototype.turnOn = function () {};
+
+  PlumbingSystem.prototype.turnOff = function () {};
+
+  return PlumbingSystem;
+}();
+
+var ElectricalSystem =
+/** @class */
+function () {
+  function ElectricalSystem() {}
+
+  ElectricalSystem.prototype.setVoltage = function (v) {};
+
+  ElectricalSystem.prototype.turnOn = function () {};
+
+  ElectricalSystem.prototype.turnOff = function () {};
+
+  return ElectricalSystem;
+}();
+
+var HouseFascade =
+/** @class */
+function () {
+  function HouseFascade() {
+    this.plumbing = new PlumbingSystem();
+    this.electrical = new ElectricalSystem();
+  }
+
+  HouseFascade.prototype.turnOnSystems = function () {
+    this.electrical.setVoltage(120);
+    this.electrical.turnOn();
+    this.plumbing.setPressure(500);
+    this.plumbing.turnOn();
+  };
+
+  HouseFascade.prototype.shutDown = function () {
+    this.plumbing.turnOff();
+    this.electrical.turnOff();
+  };
+
+  return HouseFascade;
+}();
+
+var _default = HouseFascade;
+exports.default = _default;
+},{}],"../src/patterns/iterator.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function range(start, end, step) {
+  var _a;
+
+  if (step === void 0) {
+    step = 1;
+  }
+
+  return _a = {}, _a[Symbol.iterator] = function () {
+    return this;
+  }, _a.next = function () {
+    if (start < end) {
+      start = start + step;
+      return {
+        value: start,
+        done: false
+      };
+    }
+
+    return {
+      done: true,
+      value: end
+    };
+  }, _a;
+}
+
+var _default = range;
+exports.default = _default;
+},{}],"../src/components/app.tsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _singleton = _interopRequireDefault(require("../patterns/singleton"));
+
+var _factory = _interopRequireDefault(require("../patterns/factory"));
+
+var _builder = _interopRequireDefault(require("../patterns/builder"));
+
+var _fascade = _interopRequireDefault(require("../patterns/fascade"));
+
+var _iterator = _interopRequireDefault(require("../patterns/iterator"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var __values = void 0 && (void 0).__values || function (o) {
+  var s = typeof Symbol === "function" && Symbol.iterator,
+      m = s && o[s],
+      i = 0;
+  if (m) return m.call(o);
+  if (o && typeof o.length === "number") return {
+    next: function next() {
+      if (o && i >= o.length) o = void 0;
+      return {
+        value: o && o[i++],
+        done: !o
+      };
+    }
+  };
+  throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
+
+var e_1, _a;
+
+var settings = _singleton.default.getInstance();
+
+var os = 'Android';
+var factory = new _factory.default();
+var btn1 = factory.createButton(os);
+var btn2 = factory.createButton(os);
+var myLunch = new _builder.default('gluten free').addKetchup().addMustard().addKraut();
+var client = new _fascade.default();
+client.turnOnSystems();
+client.shutDown();
+
+try {
+  for (var _b = __values((0, _iterator.default)(0, 100, 5)), _c = _b.next(); !_c.done; _c = _b.next()) {
+    var n = _c.value;
+    console.log(n);
+  }
+} catch (e_1_1) {
+  e_1 = {
+    error: e_1_1
+  };
+} finally {
+  try {
+    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+  } finally {
+    if (e_1) throw e_1.error;
+  }
+}
+
+function App() {
+  return _react.default.createElement("div", null, _react.default.createElement("h1", null, "Hello world"));
+}
+
+var _default = App;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","../patterns/singleton":"../src/patterns/singleton.ts","../patterns/factory":"../src/patterns/factory.ts","../patterns/builder":"../src/patterns/builder.ts","../patterns/fascade":"../src/patterns/fascade.ts","../patterns/iterator":"../src/patterns/iterator.ts"}],"../src/index.tsx":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
 
-var _reactDom = require("react-dom");
+var _client = _interopRequireDefault(require("react-dom/client"));
 
 require("./assets/index.scss");
 
+var _app = _interopRequireDefault(require("./components/app"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Application = function Application() {
-  return _react.default.createElement("h1", null, "Application");
-};
+var root = _client.default.createRoot(document.getElementById("root"));
 
-(0, _reactDom.render)(_react.default.createElement(Application, null), document.getElementById('root'));
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","./assets/index.scss":"../src/assets/index.scss"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+root.render(_react.default.createElement(_react.default.StrictMode, null, _react.default.createElement(_app.default, null)));
+},{"react":"../node_modules/react/index.js","react-dom/client":"../node_modules/react-dom/client.js","./assets/index.scss":"../src/assets/index.scss","./components/app":"../src/components/app.tsx"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -32916,7 +33226,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34505" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "32999" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
